@@ -1,0 +1,26 @@
+{
+  "name": "mynodesapp",
+  "version": "1.0.0",
+  "description": "my new node app",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "Node",
+    "Express",
+    "Mongooes"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.11",
+    "nodemon": "^2.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.0.1"
+  }
+}
