@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const dbConfig = require('../myNodesApp/database.config.js');
+const dbConfig = require('../APIRepo/database.config.js');
 const mongoose = require('mongoose');
 const app = express();
 
@@ -12,7 +12,7 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true,
-    useNewUrlParser: true,
+   // useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
     console.log("successfully contected to database");
@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
     res.json({ "message": message });
 });
 
-require('./app/routes/note.routes')(app)
+require('../APIRepo/app/routes/note.routes')(app)
 
 app.listen(3000, () => {
     console.log("Server is listening on port 3000");
