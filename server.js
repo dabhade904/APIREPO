@@ -12,7 +12,6 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect(dbConfig.url, {
     useNewUrlParser: true,
-   // useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
     console.log("successfully contected to database");

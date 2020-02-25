@@ -1,85 +1,62 @@
-const Note = require('../models/note.model');
+const create = require('../service/note.service')
 
-exports.create = (req, res) => { // res.send({message:"Post a notes"})
-
+exports.create = (req, res) => {
     if (!req.body.content) {
-        return res.status(400).send({message: "Note cannot empty"});
-    }
-    const note = new Note({
-        title: req.body.title || "Untitled Note",
-        content: req.body.content
-    });
-    
-    note.save().then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || " Some Error Occurred while creating"
+        return res.status(400).send({
+            //res.send({message:"Post a note"});
+            message: "note cannot be empty"
         });
-    });
+    }
+    console.log("body.content---------->", req.body.content);
+    const notes = {
+        title: req.body.title || "untitled Note",
+        content: req.body.content
+    };
+    create.create(notes,(err,data)=> {
+        if(err){
+            res.status(500).send({
+                message:err.message || "some error has occurred"
+            })
+        }
+        console.log("inside controller--> ", data);
+        res.json(data);
+    })
 }
 
-    exports.findAll=(req,res)=>{
-        Note.find().then(note =>{
-            res.send(note);
-        }).catch(err => {
-            res.status(500).send({
-                message:err.message || "Some Error While Creating"
-            })
-        })
-    }
+
+exports.findAll = (req, res) => {
+    create.findAll(req, ((err, data) => {
+        if (err) {
+            message: "something went wrong"
+        }
+        res.send(data);
+    }))
+}
 
 exports.findOne = (req, res) => {
-    Note.findById(req.params.noteId).
-        then(note => {
-            if (!note) {
-                res.status(404).send({
-                    message: "Note not found with id" + req.parsrams.noteId
-                });
-            }
-            res.send(note);
-        }).catch(err => {
-            if (err.kind === 'ObjectId') {
-                return res.status(404).send({
-                    message: "Note not found with id :" + req.params.noteId
-                });
-            }
-            return res.status(500).send({
-                message: "Error while receiving note with id " + req.params.noteId
-            });
-        });
-};
-
-exports.update = (req,res) => {
-    console.log("responce data--> "+req.body)
-    Note.updateOne({"_id" : req.params.noteId},{$set:{"title":req.body.title} }).
-    then(data => {
-        console.log("data......>",data);
+    create.findOne(req.params.noteId, ((err, data) => {
+        if (err) {
+            message: err.message || "something went wrong"
+        }
         res.send(data);
-    }).catch(err =>{
-        res.status(404).send({
-            message: "Error occurred while updating id" + req.params.noteId
-        })
-    })
-} 
+    }))
+}
 
-exports.delete=(req,res)=>{
-    Note.findOneAndDelete(req.params.noteId).
-    then(note=>{
-        if(!note){
-            return res.status(404).send({
-                message:"Note not found with id "+req.params.noteId
-            });
+
+exports.update = (req, res) => {
+    create.update(req, function (err, data) {
+        if (err) {
+            message: "some error ocurred"
         }
-        res.send({
-            message:"Note deleted successfully"
-        });
-    }).catch(err =>{
-        if(err.kind === 'objectId'){
-            return res.status(404).send({
-                message:"Note not found with id"+req.params.noteId
-            });
-        }
+        res.send(data);
     })
 }
 
+exports.delete = (req, res) => {
+    create.deleting(req.params.noteId, function (err, data) {
+        if (err) {
+            message: "something went wrong"
+        }
+        res.send(data)
+    })
+}
